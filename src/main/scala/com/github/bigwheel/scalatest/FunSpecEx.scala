@@ -44,6 +44,26 @@ class FunSpecEx extends FunSpec {
 
   }
 
+  override protected val they: TheyWord = new TheyWord() {
+
+    override def apply(specText: String, testTags: Tag*)
+      (testFun: => Any /* Assertion */)
+      (implicit pos: source.Position): Unit = {
+      tree = tree.insert(SpecText(specText).right[DescriptionWithBefore].leaf)
+      super.apply(specText, testTags: _*)(testFun)(pos)
+    }
+
+  }
+
+  override protected def describe(description: String)
+    (fun: => Unit)
+    (implicit pos: source.Position): Unit = {
+    val backup = tree
+    tree = DescriptionWithBefore(description, () => ()).left[SpecText].node()
+    super.describe(description)(fun)(pos)
+    tree = backup.insert(tree)
+  }
+
   protected[this] def describeWithBefore(description: String)
     (before: => Unit)
     (fun: => Unit)

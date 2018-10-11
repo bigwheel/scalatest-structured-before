@@ -31,6 +31,19 @@ class FunSpecExSpec extends FunSpecEx with Matchers {
         }
       }
     }
+
+    describe("with normal description") {
+      describeWithBefore("works correctly (+ 9)") { subject += 9 } {
+        it("is 9") {
+          subject should be(9)
+        }
+
+        they("`they` also be able to be used") {
+          subject should be(9)
+        }
+      }
+    }
+
   }
 
 }

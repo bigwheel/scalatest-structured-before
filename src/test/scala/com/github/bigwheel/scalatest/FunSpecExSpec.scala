@@ -6,6 +6,12 @@ class FunSpecExSpec extends FunSpecEx with Matchers {
 
   var subject: Int = _
 
+  describeWithText("description can be used in test") { desc =>
+    it ("like this") {
+      desc should be("description can be used in test")
+    }
+  }
+
   describeWithBefore("When initialized by 0"){ subject = 0 } {
     it("is 0") {
       subject should be(0)
@@ -25,9 +31,12 @@ class FunSpecExSpec extends FunSpecEx with Matchers {
         }
       }
 
-      describeWithBefore("and * -1"){ subject *= -1 } {
+      describeWithTextAndBefore("and * -1"){ subject *= -1 } { desc =>
         it("is -5") {
           subject should be(-5)
+        }
+        it("desc can be used in test") {
+          desc should be ("and * -1")
         }
       }
     }

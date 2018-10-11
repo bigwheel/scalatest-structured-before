@@ -57,12 +57,13 @@ class FunSpecEx extends FunSpec {
 
   override protected def describe(description: String)
     (fun: => Unit)
-    (implicit pos: source.Position): Unit = {
-    val backup = tree
-    tree = DescriptionWithBefore(description, () => ()).left[SpecText].node()
-    super.describe(description)(fun)(pos)
-    tree = backup.insert(tree)
-  }
+    (implicit pos: source.Position): Unit =
+    describeWithBefore(description){ () }(fun _)
+
+  protected def describeWithText(description: String)
+    (fun: String => Unit)
+    (implicit pos: source.Position): Unit =
+    this.describe(description) { fun(description) }
 
   protected[this] def describeWithBefore(description: String)
     (before: => Unit)
@@ -73,6 +74,12 @@ class FunSpecEx extends FunSpec {
     super.describe(description)(fun)(pos)
     tree = backup.insert(tree)
   }
+
+  protected[this] def describeWithTextAndBefore(description: String)
+    (before: => Unit)
+    (fun: String => Unit)
+    (implicit pos: org.scalactic.source.Position): Unit =
+    this.describeWithBefore(description)(before) { fun(description) }
 
   protected override def runTest(testName: String, args: Args): Status = {
     val targetTestLeaf = tree.loc.find { _.fullQualifiedTestName == testName }.get

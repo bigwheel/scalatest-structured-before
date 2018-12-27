@@ -11,26 +11,9 @@ libraryDependencies ++= Seq(
 
 // about maven publish
 publishMavenStyle := true
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-}
+publishTo := sonatypePublishTo.value
 publishArtifact in Test := false
+
+import xerial.sbt.Sonatype._
 licenses := Seq("BSD-3-Clause" -> url("https://github.com/bigwheel/scalatest-structured-before/blob/master/LICENSE"))
-homepage := Some(url("https://github.com/bigwheel/scalatest-structured-before"))
-pomExtra := (
-  <scm>
-    <url>git@github.com:bigwheel/scalatest-structured-before.git</url>
-    <connection>scm:git:git@github.com:bigwheel/scalatest-structured-before.git</connection>
-  </scm>
-    <developers>
-      <developer>
-        <id>bigwheel</id>
-        <name>k.bigwheel</name>
-        <url>https://github.com/bigwheel</url>
-      </developer>
-    </developers>
-  )
+sonatypeProjectHosting := Some(GitHubHosting("bigwheel", name.value, "k.bigwheel", "k.bigwheel+eng@gmail.com"))

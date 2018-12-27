@@ -58,7 +58,7 @@ class FunSpecEx extends FunSpec {
   override protected def describe(description: String)
     (fun: => Unit)
     (implicit pos: source.Position): Unit =
-    describeWithBefore(description){ () }(fun _)
+    describeWithBefore(description){ () }(fun)
 
   protected def describeWithText(description: String)
     (fun: String => Unit)
